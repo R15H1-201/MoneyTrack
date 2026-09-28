@@ -13,6 +13,6 @@ Thumbs.db
 .env
 .env.*
 
-# Android signing files
+# Android signing
 *.jks
 *.keystore

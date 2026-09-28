@@ -1,0 +1,18 @@
+node_modules/
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.idea/
+*.iml
+local.properties
+
+.DS_Store
+Thumbs.db
+
+.env
+.env.*
+
+# Android signing files
+*.jks
+*.keystore

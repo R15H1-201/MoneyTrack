@@ -1,163 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2563eb">
-<meta name="description" content="MoneyTrack personal money and expense manager">
-<title>MoneyTrack | Expense Manager</title>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>MoneyTrack | Personal Finance Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="toast" class="toast"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-mark">₹</div><div><strong>MoneyTrack</strong><span>Personal finance</span></div></div>
+    <nav class="side-nav">
+      <button class="nav-item active" data-page="dashboard"><span>⌂</span>Dashboard</button>
+      <button class="nav-item" data-page="accounts"><span>▣</span>Accounts</button>
+      <button class="nav-item" data-page="people"><span>♙</span>People</button>
+      <button class="nav-item" data-page="reports"><span>◔</span>Reports</button>
+      <button class="nav-item" data-page="settings"><span>⚙</span>Settings</button>
+    </nav>
+    <div class="sidebar-footer"><div class="tip-card"><b>Money tip</b><p>Small expenses add up. Review your spending regularly.</p></div></div>
+  </aside>
 
-<div class="app">
-<aside class="sidebar" id="sidebar">
-  <div class="brand"><span>💰</span><div><strong>MoneyTrack</strong><small>Personal Finance</small></div></div>
-  <nav>
-    <button class="nav-item active" data-page="dashboard"><span>🏠</span>Dashboard</button>
-    <button class="nav-item" data-page="transactions"><span>💳</span>Transactions</button>
-    <button class="nav-item" data-page="accounts"><span>🏦</span>Accounts</button>
-    <button class="nav-item" data-page="people"><span>👥</span>People</button>
-    <button class="nav-item" data-page="reports"><span>📊</span>Reports</button>
-    <button class="nav-item" data-page="settings"><span>⚙️</span>Settings</button>
-  </nav>
-  <div class="sidebar-footer">Your data stays in this browser.</div>
-</aside>
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn mobile-only" id="menuBtn">☰</button>
+      <div class="topbar-title"><span id="pageEyebrow">Overview</span><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="top-actions"><button class="icon-btn" id="themeBtn" title="Toggle dark mode">☾</button><button class="primary-btn" id="quickAdd">+ Add transaction</button></div>
+    </header>
 
-<main class="main">
-<header class="topbar">
-  <button class="mobile-menu" id="menuBtn">☰</button>
-  <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Your money at a glance.</p></div>
-  <button class="primary" id="quickAdd">＋ Add Transaction</button>
-</header>
-
-<!-- DASHBOARD -->
-<section class="page active" id="page-dashboard">
-  <div class="hero-grid">
-    <div class="balance-card"><span>Total Balance</span><strong id="dashBalance">₹0</strong><small>Across all your accounts</small></div>
-    <div class="stat-card"><div class="stat-icon income">↗</div><div><span>Income</span><strong id="dashIncome">₹0</strong></div></div>
-    <div class="stat-card"><div class="stat-icon expense">↘</div><div><span>Expenses</span><strong id="dashExpense">₹0</strong></div></div>
-    <div class="stat-card"><div class="stat-icon">📋</div><div><span>Transactions</span><strong id="dashCount">0</strong></div></div>
-  </div>
-  <div class="section-title"><div><h2>Accounts</h2><p>Balances by payment method.</p></div><button class="text-btn" data-page-target="accounts">Manage</button></div>
-  <div class="account-grid" id="dashAccounts"></div>
-  <div class="two-col">
-    <div class="panel"><div class="panel-head"><div><h2>Recent Transactions</h2><p>Your latest activity.</p></div><button class="text-btn" data-page-target="transactions">View all</button></div><div id="recentList"></div></div>
-    <div class="panel"><div class="panel-head"><div><h2>Spending by Category</h2><p>Current recorded expenses.</p></div></div><div id="categorySummary" class="category-list"></div></div>
-  </div>
-</section>
-
-<!-- TRANSACTIONS -->
-<section class="page" id="page-transactions">
-  <div class="toolbar">
-    <input id="searchTransactions" type="search" placeholder="Search notes, people, categories...">
-    <select id="filterType"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option><option value="given">Money Given</option><option value="received">Money Received</option><option value="transfer">Transfer</option></select>
-    <select id="filterAccount"><option value="all">All accounts</option><option value="cash">Cash</option><option value="upi">UPI</option><option value="bank">Bank</option><option value="other">Other</option></select>
-    <input id="filterDate" type="month">
-    <button class="secondary" id="clearFilters">Clear</button>
-  </div>
-  <div class="panel"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Transaction</th><th>Person</th><th>Account</th><th>Amount</th><th></th></tr></thead><tbody id="transactionTable"></tbody></table></div></div>
-</section>
-
-<!-- ACCOUNTS -->
-<section class="page" id="page-accounts">
-  <div class="page-actions"><div><h2>Accounts</h2><p>Track cash, UPI, bank and other balances.</p></div><button class="primary" id="editStartingBalances">Edit Starting Balances</button></div>
-  <div class="account-grid large" id="accountsPageGrid"></div>
-  <div class="info-box"><strong>How balances work</strong><p>Income and money received increase an account. Expenses and money given decrease it. Transfers move money between accounts without counting as income or expense.</p></div>
-</section>
-
-<!-- PEOPLE -->
-<section class="page" id="page-people">
-  <div class="page-actions"><div><h2>People</h2><p>Keep contacts and track money exchanged with them.</p></div><button class="primary" id="addPersonBtn">＋ Add Person</button></div>
-  <div class="people-grid" id="peopleGrid"></div>
-</section>
-
-<!-- REPORTS -->
-<section class="page" id="page-reports">
-  <div class="hero-grid report-stats">
-    <div class="stat-card"><div class="stat-icon income">↗</div><div><span>Total received</span><strong id="reportIncome">₹0</strong></div></div>
-    <div class="stat-card"><div class="stat-icon expense">↘</div><div><span>Total spent</span><strong id="reportExpense">₹0</strong></div></div>
-    <div class="stat-card"><div class="stat-icon">🤝</div><div><span>Money given</span><strong id="reportGiven">₹0</strong></div></div>
-    <div class="stat-card"><div class="stat-icon">💵</div><div><span>Money received</span><strong id="reportReceived">₹0</strong></div></div>
-  </div>
-  <div class="two-col">
-    <div class="panel"><div class="panel-head"><div><h2>Category Breakdown</h2><p>Expense distribution.</p></div></div><div id="reportCategories" class="bars"></div></div>
-    <div class="panel"><div class="panel-head"><div><h2>Monthly Summary</h2><p>Last six months.</p></div></div><div id="monthlyReport" class="bars"></div></div>
-  </div>
-</section>
-
-<!-- SETTINGS -->
-<section class="page" id="page-settings">
-  <div class="settings-grid">
-    <div class="panel"><h2>Appearance</h2><p>Customize how MoneyTrack looks.</p><label class="setting-row"><span>Dark mode</span><input type="checkbox" id="darkMode"></label></div>
-    <div class="panel"><h2>Data Backup</h2><p>Keep a copy of your data or restore it on another browser.</p><div class="button-row"><button class="secondary" id="exportData">Export JSON</button><button class="secondary" id="exportCsv">Export CSV</button><label class="secondary file-label">Import JSON<input type="file" id="importData" accept=".json"></label></div></div>
-    <div class="panel danger-panel"><h2>Reset Data</h2><p>This permanently clears all transactions, people and account balances from this browser.</p><button class="danger" id="resetData">Clear All Data</button></div>
-  </div>
-</section>
-</main>
-</div>
-
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <button class="nav-item active" data-page="dashboard"><span>🏠</span><small>Home</small></button>
-  <button class="nav-item" data-page="transactions"><span>💳</span><small>Transactions</small></button>
-  <button class="fab" id="mobileAdd">＋</button>
-  <button class="nav-item" data-page="people"><span>👥</span><small>People</small></button>
-  <button class="nav-item" data-page="reports"><span>📊</span><small>Reports</small></button>
-</nav>
-
-<!-- TRANSACTION MODAL -->
-<div class="modal" id="transactionModal">
-<div class="modal-card">
-  <div class="modal-head"><div><h2 id="transactionModalTitle">Add Transaction</h2><p>Record what happened to your money.</p></div><button class="icon-btn" data-close="transactionModal">×</button></div>
-  <form id="transactionForm">
-    <input type="hidden" id="transactionId">
-    <div class="form-grid">
-      <label>Type<select id="transactionType" required><option value="income">💰 Income</option><option value="expense">💸 Expense</option><option value="given">🤝 Money Given</option><option value="received">💵 Money Received</option><option value="transfer">🔄 Transfer</option></select></label>
-      <label>Amount (₹)<input id="transactionAmount" type="number" min="0.01" step="0.01" required placeholder="0"></label>
-      <label>Account<select id="transactionAccount" required><option value="cash">💵 Cash</option><option value="upi">📱 UPI</option><option value="bank">🏦 Bank</option><option value="other">💳 Other</option></select></label>
-      <label id="toAccountWrap" class="hidden">Transfer To<select id="toAccount"><option value="cash">💵 Cash</option><option value="upi">📱 UPI</option><option value="bank">🏦 Bank</option><option value="other">💳 Other</option></select></label>
-      <label>Category<select id="transactionCategory"><option>Food</option><option>Shopping</option><option>Travel</option><option>Bills</option><option>Education</option><option>Entertainment</option><option>Health</option><option>Salary</option><option>Freelance</option><option>Other</option></select></label>
-      <label>Person<select id="transactionPerson"><option value="">No person / Personal</option></select></label>
-      <label>Date<input id="transactionDate" type="date" required></label>
-      <label class="full">Note<textarea id="transactionNote" rows="3" placeholder="What was this transaction for?"></textarea></label>
+    <div id="page-dashboard" class="page active">
+      <section class="hero">
+        <div><span class="eyebrow">Financial overview</span><h2>Know where your money goes.</h2><p>Track income, expenses, transfers, and money you give or receive in one place.</p></div>
+        <button class="soft-btn" id="heroAdd">+ Quick transaction</button>
+      </section>
+      <section class="summary-grid" id="summaryCards"></section>
+      <section class="dashboard-grid">
+        <div class="panel">
+          <div class="panel-head"><div><span class="eyebrow">Activity</span><h3>Recent transactions</h3></div><button class="text-btn" data-page-jump="reports">View all</button></div>
+          <div id="recentTransactions"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><span class="eyebrow">Accounts</span><h3>Account snapshot</h3></div><button class="text-btn" data-page-jump="accounts">Manage</button></div>
+          <div id="accountSnapshot"></div>
+        </div>
+      </section>
     </div>
-    <div class="modal-actions"><button type="button" class="secondary" data-close="transactionModal">Cancel</button><button class="primary" type="submit">Save Transaction</button></div>
-  </form>
-</div>
+
+    <div id="page-accounts" class="page">
+      <div class="section-heading"><div><span class="eyebrow">Money sources</span><h2>Accounts</h2><p>Keep cash, UPI apps, and other balances organized.</p></div><button class="primary-btn" id="addAccount">+ Add account</button></div>
+      <div class="cards-grid" id="accountsGrid"></div>
+    </div>
+
+    <div id="page-people" class="page">
+      <div class="section-heading"><div><span class="eyebrow">Borrowed & lent</span><h2>People</h2><p>Track who owes you and whom you owe.</p></div><button class="primary-btn" id="addPerson">+ Add person</button></div>
+      <div class="summary-grid compact" id="peopleSummary"></div>
+      <div class="panel"><div class="panel-head"><div><span class="eyebrow">Contacts</span><h3>Outstanding balances</h3></div></div><div id="peopleList"></div></div>
+    </div>
+
+    <div id="page-reports" class="page">
+      <div class="section-heading"><div><span class="eyebrow">Insights</span><h2>Reports</h2><p>Understand your income, spending, transfers, and personal lending.</p></div><select class="select" id="reportRange"><option value="all">All time</option><option value="month">This month</option><option value="year">This year</option></select></div>
+      <div class="summary-grid" id="reportSummary"></div>
+      <div class="reports-grid">
+        <div class="panel"><div class="panel-head"><div><span class="eyebrow">Breakdown</span><h3>Expenses by category</h3></div></div><div id="categoryChart" class="bars"></div></div>
+        <div class="panel"><div class="panel-head"><div><span class="eyebrow">Accounts</span><h3>Account balances</h3></div></div><div id="accountChart" class="bars"></div></div>
+      </div>
+      <div class="panel"><div class="panel-head"><div><span class="eyebrow">Transactions</span><h3>History</h3></div><div class="filters"><input id="searchTx" class="input" placeholder="Search..."><select id="typeFilter" class="select"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option><option value="given">Money given</option><option value="received">Money received</option><option value="transfer">Transfer</option></select></div></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Account</th><th>Person</th><th>Amount</th><th></th></tr></thead><tbody id="transactionTable"></tbody></table></div></div>
+    </div>
+
+    <div id="page-settings" class="page">
+      <div class="section-heading"><div><span class="eyebrow">Preferences</span><h2>Settings</h2><p>Customize MoneyTrack and manage your stored data.</p></div></div>
+      <div class="settings-grid">
+        <div class="panel"><h3>Appearance</h3><div class="setting-row"><div><b>Dark mode</b><span>Use a darker interface for low-light environments.</span></div><label class="switch"><input type="checkbox" id="darkToggle"><i></i></label></div></div>
+        <div class="panel"><h3>Data management</h3><div class="setting-actions"><button class="soft-btn" id="exportJson">Export JSON</button><button class="soft-btn" id="exportCsv">Export transactions CSV</button><button class="soft-btn" id="importJsonBtn">Import JSON</button><input type="file" id="importJson" accept=".json" hidden><button class="danger-btn" id="resetData">Reset all data</button></div><p class="muted">Your data is stored locally in this browser. Clearing browser storage will also remove it.</p></div>
+        <div class="panel"><h3>About MoneyTrack</h3><p class="muted">A local-first personal finance tracker. No server or account is required.</p><div class="data-count" id="dataCount"></div></div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<!-- PERSON MODAL -->
-<div class="modal" id="personModal">
-<div class="modal-card small">
-  <div class="modal-head"><div><h2 id="personModalTitle">Add Person</h2><p>Save useful contact details.</p></div><button class="icon-btn" data-close="personModal">×</button></div>
-  <form id="personForm">
-    <input type="hidden" id="personId">
-    <label>Name<input id="personName" required placeholder="Full name"></label>
-    <label>Phone<input id="personPhone" type="tel" placeholder="+91 98765 43210"></label>
-    <label>Email<input id="personEmail" type="email" placeholder="name@example.com"></label>
-    <label>Relationship<input id="personRelation" placeholder="Friend, family, colleague..."></label>
-    <label>Notes<textarea id="personNotes" rows="3" placeholder="Optional notes"></textarea></label>
-    <div class="modal-actions"><button type="button" class="secondary" data-close="personModal">Cancel</button><button class="primary">Save Person</button></div>
-  </form>
+<button class="fab" id="fab">+</button>
+<div class="toast" id="toast"></div>
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modal"></div>
 </div>
-</div>
-
-<!-- STARTING BALANCES MODAL -->
-<div class="modal" id="balancesModal">
-<div class="modal-card small">
-  <div class="modal-head"><div><h2>Starting Balances</h2><p>Set the money you already have before tracked transactions.</p></div><button class="icon-btn" data-close="balancesModal">×</button></div>
-  <form id="balancesForm">
-    <label>💵 Cash<input id="startCash" type="number" min="0" step="0.01"></label>
-    <label>📱 UPI<input id="startUpi" type="number" min="0" step="0.01"></label>
-    <label>🏦 Bank<input id="startBank" type="number" min="0" step="0.01"></label>
-    <label>💳 Other<input id="startOther" type="number" min="0" step="0.01"></label>
-    <div class="modal-actions"><button type="button" class="secondary" data-close="balancesModal">Cancel</button><button class="primary">Save Balances</button></div>
-  </form>
-</div>
-</div>
-
-<script src="js/app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
